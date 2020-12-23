@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { SIGN_IN, COPYRIGHT, FORGOT_PASSWORD, SIGN_UP } from '../../utils/constants/text';
+import { isFalsy } from '../../utils/isFalsy';
 
 const Copyright = () => {
   return (
@@ -53,9 +54,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = ({
+  userId,
+  password,
+  handleOnChaneUserId,
+  handleOnChangePassword,
+  handleSignIn  
+}) => {
   const classes = useStyles();
-
+  const disabled = !isFalsy(userId) && !isFalsy(password);
+  
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -74,11 +82,12 @@ const Login = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="userId"
+              label="User Id"
+              name="user id"
+              value={userId}
               autoFocus
+              onChange={handleOnChaneUserId}
             />
             <TextField
               variant="outlined"
@@ -90,17 +99,21 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={handleOnChangePassword}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               color="primary"
+              onClick={handleSignIn}
               className={classes.submit}
+              disabled={!disabled}
             >
              {SIGN_IN}
             </Button>
